@@ -4,330 +4,488 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
+    <!-- Google Fonts: ポップな雰囲気に合う丸ゴシック体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Varela+Round&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS (スタイリング用) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome (アイコン用) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts (フォント) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: #fafafa; /* インスタグラムのような薄いグレー背景 */
-        }
-        
-        /* インスタグラム風グラデーション定義 */
-        .insta-gradient-text {
-            background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .insta-gradient-bg {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #f8f9fa; /* クリーンな背景 */
+            overflow-x: hidden;
         }
 
-        .insta-border {
+        /* カスタムボタンのデザイン 
+          画像のような「マットで立体的かつ発光している」質感を再現
+        */
+        .nav-btn {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            background: #fff;
-            padding: 3px;
-            border-radius: 50%;
+            overflow: hidden;
+            border: none;
+        }
+
+        /* 各ボタンの色定義 (ShadowとGradient) */
+        
+        /* Projects: Cyan */
+        .btn-cyan {
+            background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+            box-shadow: 
+                0 10px 20px -5px rgba(6, 182, 212, 0.4),
+                0 4px 6px -2px rgba(6, 182, 212, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4), /* 上部のハイライト */
+                inset 0 -4px 4px rgba(0, 0, 0, 0.05); /* 下部の影 */
+        }
+        .btn-cyan:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 30px -8px rgba(6, 182, 212, 0.6),
+                0 0 15px rgba(34, 211, 238, 0.8); /* 発光強化 */
+        }
+
+        /* Skills: Magenta */
+        .btn-magenta {
+            background: linear-gradient(135deg, #f0abfc 0%, #e879f9 50%, #d946ef 100%);
+            box-shadow: 
+                0 10px 20px -5px rgba(217, 70, 239, 0.4),
+                0 4px 6px -2px rgba(217, 70, 239, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -4px 4px rgba(0, 0, 0, 0.05);
+        }
+        .btn-magenta:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 30px -8px rgba(217, 70, 239, 0.6),
+                0 0 15px rgba(240, 171, 252, 0.8);
+        }
+
+        /* About: Orange */
+        .btn-orange {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            box-shadow: 
+                0 10px 20px -5px rgba(245, 158, 11, 0.4),
+                0 4px 6px -2px rgba(245, 158, 11, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -4px 4px rgba(0, 0, 0, 0.05);
+        }
+        .btn-orange:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 30px -8px rgba(245, 158, 11, 0.6),
+                0 0 15px rgba(251, 191, 36, 0.8);
+        }
+
+        /* Contact: Lime */
+        .btn-lime {
+            background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%);
+            box-shadow: 
+                0 10px 20px -5px rgba(132, 204, 22, 0.4),
+                0 4px 6px -2px rgba(132, 204, 22, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -4px 4px rgba(0, 0, 0, 0.05);
+        }
+        .btn-lime:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 20px 30px -8px rgba(132, 204, 22, 0.6),
+                0 0 15px rgba(163, 230, 53, 0.8);
+        }
+
+        /* アバターの浮遊アニメーション */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .avatar-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* 光の輪のアニメーション */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        .glow-ring {
+            animation: pulse-ring 3s infinite ease-in-out;
+        }
+
+        /* 背景の装飾パーティクル */
+        .particle {
+            position: absolute;
+            opacity: 0.6;
+            animation: float-particle 6s infinite ease-in-out;
+        }
+        @keyframes float-particle {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -15px) rotate(10deg); }
+            50% { transform: translate(-5px, 10px) rotate(-10deg); }
+            75% { transform: translate(-10px, -5px) rotate(5deg); }
+        }
+
+        /* モーダル表示のアニメーション */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 200ms, transform 200ms;
         }
         
-        .insta-border::after {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            z-index: -1;
-            border-radius: 50%;
+        /* Scrollbar styling for modal content */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
         }
 
-        /* アニメーション */
-        .fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .slide-up {
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center py-8 px-4">
+<body class="flex items-center justify-center min-h-screen relative selection:bg-cyan-200">
 
-    <!-- メインコンテンツコンテナ（スマホ画面サイズを意識） -->
-    <main id="app" class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden min-h-[600px] relative">
-        <!-- コンテンツはJavaScriptによってここに描画されます -->
+    <!-- 背景装飾 (SVGパーティクル) -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+        <!-- 左上の装飾 -->
+        <svg class="particle text-yellow-300" style="top: 15%; left: 15%; width: 30px; animation-delay: 0s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg class="particle text-cyan-300" style="top: 25%; left: 10%; width: 20px; animation-delay: 1s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/></svg>
+        <svg class="particle text-pink-300" style="top: 10%; left: 30%; width: 25px; animation-delay: 2s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
+        
+        <!-- 中央付近の装飾 -->
+        <svg class="particle text-orange-300" style="top: 50%; left: 40%; width: 40px; animation-delay: 1.5s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2v20M2 12h20"/></svg>
+
+        <!-- アバター周りの紙吹雪 -->
+        <div class="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 pointer-events-none">
+            <div class="absolute w-4 h-4 bg-yellow-400 rounded-full top-10 left-10 animate-bounce" style="animation-duration: 3s;"></div>
+            <div class="absolute w-3 h-3 bg-cyan-400 rounded-sm bottom-20 right-10 animate-pulse"></div>
+            <div class="absolute w-6 h-1 bg-pink-400 rotate-45 top-1/2 right-0"></div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <main class="container mx-auto px-4 max-w-5xl flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 relative z-10">
+        
+        <!-- 左側: キャラクター / アバターエリア -->
+        <div class="relative w-full md:w-1/2 flex justify-center items-center">
+            <!-- 光の輪エフェクト (背景) -->
+            <div class="absolute w-80 h-80 bg-cyan-100 rounded-full blur-3xl opacity-60 glow-ring"></div>
+            <div class="absolute w-64 h-64 bg-white rounded-full opacity-40 blur-xl animate-pulse"></div>
+
+            <!-- イラスト (SVGで構成) -->
+            <div class="relative z-10 w-64 h-auto avatar-float">
+               <!-- 簡易的なキャラクターイラストSVG -->
+               <svg viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl filter">
+                    <!-- 体の輝き(背後) -->
+                    <defs>
+                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="10" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                    </defs>
+
+                    <!-- 体 -->
+                    <path d="M50 140 C 30 160, 30 220, 30 250 L 170 250 C 170 220, 170 160, 150 140 C 130 120, 70 120, 50 140" fill="#E0F7FA" stroke="#0891B2" stroke-width="4"/>
+                    
+                    <!-- 腕 (左) -->
+                    <path d="M50 150 Q 20 180 20 220" stroke="#0891B2" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <path d="M20 220 L 15 235 M 20 220 L 25 235 M 20 220 L 10 225" stroke="#0891B2" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- 腕 (右 - 挨拶している手) -->
+                    <path d="M150 150 Q 180 140 190 110" stroke="#0891B2" stroke-width="4" stroke-linecap="round" fill="#E0F7FA"/>
+                    <!-- 手のひら -->
+                    <path d="M190 110 L 185 95 M 190 110 L 198 95 M 190 110 L 205 105" stroke="#0891B2" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- 頭 -->
+                    <circle cx="100" cy="80" r="45" fill="#E0F7FA" stroke="#0891B2" stroke-width="4"/>
+                    
+                    <!-- 髪の毛 (濃い青) -->
+                    <path d="M55 80 C 50 40, 70 20, 100 20 C 130 20, 150 40, 145 80 C 145 60, 130 35, 100 35 C 70 35, 55 60, 55 80" fill="#155E75"/>
+                    <path d="M100 20 Q 110 10 120 15" stroke="#155E75" stroke-width="4" stroke-linecap="round"/>
+                    
+                    <!-- 顔のパーツ -->
+                    <!-- 目 -->
+                    <circle cx="85" cy="80" r="4" fill="#155E75"/>
+                    <circle cx="115" cy="80" r="4" fill="#155E75"/>
+                    <!-- 眉 -->
+                    <path d="M80 70 Q 85 68 90 70" stroke="#155E75" stroke-width="2" fill="none"/>
+                    <path d="M110 70 Q 115 68 120 70" stroke="#155E75" stroke-width="2" fill="none"/>
+                    <!-- 口 -->
+                    <path d="M90 95 Q 100 105 110 95" stroke="#155E75" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+                    <!-- 魔法の輪のエフェクト -->
+                    <ellipse cx="100" cy="180" rx="90" ry="20" fill="none" stroke="#22D3EE" stroke-width="3" stroke-opacity="0.6" transform="rotate(-10 100 180)" />
+                    <ellipse cx="100" cy="180" rx="90" ry="20" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.8" stroke-dasharray="10 20" transform="rotate(-10 100 180)" />
+               </svg>
+            </div>
+            
+            <!-- こんにちは吹き出し -->
+            <div class="absolute -top-10 right-10 bg-white px-4 py-2 rounded-2xl shadow-lg border-2 border-cyan-100 animate-bounce" style="animation-duration: 2s;">
+                <p class="text-cyan-800 font-bold text-sm">Hello! 👋</p>
+                <div class="absolute bottom-0 left-4 transform translate-y-1/2 rotate-45 w-3 h-3 bg-white border-b-2 border-r-2 border-cyan-100"></div>
+            </div>
+        </div>
+
+        <!-- 右側: ナビゲーションメニュー -->
+        <nav class="w-full md:w-1/2 flex flex-col gap-6 items-center md:items-start" id="menu-container">
+            
+            <!-- Projects Button -->
+            <button onclick="openModal('projects')" class="nav-btn btn-cyan w-full md:w-80 h-20 rounded-full flex items-center px-4 group cursor-pointer text-left">
+                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="folder" class="text-white w-7 h-7"></i>
+                </div>
+                <span class="ml-6 text-2xl font-bold text-white tracking-wide drop-shadow-md">Projects</span>
+            </button>
+
+            <!-- Skills Button -->
+            <button onclick="openModal('skills')" class="nav-btn btn-magenta w-full md:w-80 h-20 rounded-full flex items-center px-4 group cursor-pointer text-left">
+                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="layers" class="text-white w-7 h-7"></i>
+                </div>
+                <span class="ml-6 text-2xl font-bold text-white tracking-wide drop-shadow-md">Skills</span>
+            </button>
+
+            <!-- About Button -->
+            <button onclick="openModal('about')" class="nav-btn btn-orange w-full md:w-80 h-20 rounded-full flex items-center px-4 group cursor-pointer text-left">
+                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="info" class="text-white w-7 h-7"></i>
+                </div>
+                <span class="ml-6 text-2xl font-bold text-white tracking-wide drop-shadow-md">About</span>
+            </button>
+
+            <!-- Contact Button -->
+            <button onclick="openModal('contact')" class="nav-btn btn-lime w-full md:w-80 h-20 rounded-full flex items-center px-4 group cursor-pointer text-left">
+                <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="phone" class="text-white w-7 h-7"></i>
+                </div>
+                <span class="ml-6 text-2xl font-bold text-black tracking-wide drop-shadow-sm opacity-80">Contact</span>
+            </button>
+
+        </nav>
     </main>
 
-    <!-- フッター -->
-    <footer class="mt-8 text-gray-400 text-sm">
-        &copy; 2024 My Portfolio
-    </footer>
+    <!-- モーダル / コンテンツ表示エリア (Hidden by default) -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0" onclick="closeModal()">
+        
+        <!-- モーダルコンテンツコンテナ -->
+        <div id="modal-content" class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl relative overflow-hidden transform scale-90 transition-transform duration-300" onclick="event.stopPropagation()">
+            
+            <!-- ヘッダー (色が変わる) -->
+            <div id="modal-header" class="h-24 flex items-center px-8 relative overflow-hidden">
+                <h2 id="modal-title" class="text-3xl font-extrabold text-white relative z-10 drop-shadow-md">Title</h2>
+                <!-- 装飾円 -->
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/20 rounded-full"></div>
+                <div class="absolute right-20 top-10 w-20 h-20 bg-white/10 rounded-full"></div>
+                
+                <!-- 閉じるボタン -->
+                <button onclick="closeModal()" class="absolute top-6 right-6 text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- ボディ -->
+            <div id="modal-body" class="p-8 max-h-[60vh] overflow-y-auto custom-scrollbar text-gray-700">
+                <!-- JSでコンテンツを注入 -->
+            </div>
+
+            <!-- フッター -->
+            <div class="p-4 border-t border-gray-100 flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // --- データ定義 (ここを編集してあなたの情報を入れてください) ---
-        const profileData = {
-            name: "Yuki Tanaka",
-            role: "Digital Creator & Engineer",
-            bio: "デザインとテクノロジーの力で、新しい価値を創造します。シンプルで直感的なUI/UXが得意です。",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Yuki&backgroundColor=ffdfbf", // プレースホルダー画像
-            stats: [
-                { label: "Posts", value: "12" },
-                { label: "Projects", value: "35" },
-                { label: "Years", value: "5+" }
-            ]
-        };
+        // Lucideアイコンの初期化
+        lucide.createIcons();
 
-        // スキルと詳細ページのデータ
-        const skillsData = [
-            {
-                id: "web-dev",
-                title: "Web Development",
-                icon: "fa-code",
-                shortDesc: "HTML/CSS/JS/React",
-                color: "text-blue-500",
-                details: {
-                    title: "Webサイト・アプリ開発",
-                    description: "モダンなフレームワークを使用したWebアプリケーション開発を行っています。パフォーマンスとアクセシビリティを重視したコーディングを心がけています。",
-                    tags: ["React", "Vue.js", "Tailwind CSS", "Node.js"],
-                    achievements: [
-                        "ECサイトのフロントエンド構築",
-                        "社内管理システムのUI刷新",
-                        "ポートフォリオサイトの高速化"
-                    ]
-                }
-            },
-            {
-                id: "ui-design",
-                title: "UI/UX Design",
-                icon: "fa-pen-nib",
-                shortDesc: "Figma/Adobe XD",
-                color: "text-pink-500",
-                details: {
-                    title: "UI/UX デザイン",
-                    description: "ユーザー視点に立った使いやすいインターフェースを設計します。Figmaを使用したプロトタイピングから、デザインシステムの構築まで対応可能です。",
-                    tags: ["Figma", "Adobe XD", "Prototyping", "Wireframing"],
-                    achievements: [
-                        "モバイルアプリのUXリサーチ",
-                        "LPのデザイン及びコンバージョン改善",
-                        "ブランドガイドラインの策定"
-                    ]
-                }
-            },
-            {
-                id: "marketing",
-                title: "Marketing",
-                icon: "fa-chart-line",
-                shortDesc: "SEO/SNS Analytics",
-                color: "text-orange-500",
-                details: {
-                    title: "デジタルマーケティング",
-                    description: "データに基づいたマーケティング戦略を提案します。SNS運用からSEO対策まで、認知拡大と集客をサポートします。",
-                    tags: ["Google Analytics", "SEO", "Instagram Ads", "Copywriting"],
-                    achievements: [
-                        "オウンドメディアのPV数200%増",
-                        "Instagramフォロワー獲得キャンペーン",
-                        "SEO内部施策による順位向上"
-                    ]
-                }
-            },
-            {
-                id: "photography",
-                title: "Photography",
-                icon: "fa-camera",
-                shortDesc: "Portrait/Landscape",
-                color: "text-purple-500",
-                details: {
-                    title: "写真・動画撮影",
-                    description: "ブランドの世界観を表現するビジュアルコンテンツを制作します。ポートレートから商品撮影、短編動画の編集まで対応します。",
-                    tags: ["Lightroom", "Premiere Pro", "Portrait", "Commercial"],
-                    achievements: [
-                        "飲食店メニュー写真撮影",
-                        "企業プロモーションビデオ制作",
-                        "イベント記録撮影"
-                    ]
-                }
-            }
-        ];
-
-        // --- アプリケーションロジック ---
-        const app = document.getElementById('app');
-
-        // ホーム画面の描画
-        function renderHome() {
-            let skillsHtml = skillsData.map(skill => `
-                <div onclick="renderDetail('${skill.id}')" class="cursor-pointer group">
-                    <div class="flex items-center p-4 hover:bg-gray-50 transition duration-200 border-b border-gray-100">
-                        <!-- アイコン -->
-                        <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mr-4 group-hover:bg-gray-100 transition">
-                            <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center bg-white">
-                                <i class="fa-solid ${skill.icon} ${skill.color} text-lg"></i>
+        // コンテンツデータ
+        const contents = {
+            projects: {
+                title: "My Projects",
+                colorClass: "btn-cyan", // ヘッダーの背景色として利用
+                headerGradient: "linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%)",
+                html: `
+                    <div class="space-y-6">
+                        <div class="group bg-slate-50 p-4 rounded-xl border border-slate-100 hover:shadow-lg transition-shadow">
+                            <h3 class="text-xl font-bold text-cyan-600 mb-2">E-Commerce App</h3>
+                            <p class="text-sm text-gray-600 mb-3">React, Node.js, Stripeを使用したモダンなECサイト。</p>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 bg-cyan-100 text-cyan-700 text-xs rounded-md font-bold">React</span>
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md font-bold">Node.js</span>
                             </div>
                         </div>
-                        <!-- テキスト -->
-                        <div class="flex-1">
-                            <h3 class="font-bold text-sm text-gray-800 group-hover:text-pink-600 transition">${skill.title}</h3>
-                            <p class="text-xs text-gray-500">${skill.shortDesc}</p>
-                        </div>
-                        <!-- 矢印 -->
-                        <div class="text-gray-300">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            const html = `
-                <div class="fade-in pb-16">
-                    <!-- ヘッダー -->
-                    <div class="sticky top-0 bg-white/90 backdrop-blur-sm z-10 border-b border-gray-100 px-4 py-3 flex justify-between items-center">
-                        <h1 class="font-bold text-lg insta-gradient-text" style="font-family: cursive;">Portfolio</h1>
-                        <button onclick="alert('コンタクトフォームへ')" class="text-gray-800 hover:text-pink-600 transition">
-                            <i class="fa-regular fa-paper-plane text-xl"></i>
-                        </button>
-                    </div>
-
-                    <!-- プロフィールセクション -->
-                    <div class="px-4 py-6">
-                        <div class="flex items-center mb-4">
-                            <!-- プロフィール画像（ストーリーリング付き） -->
-                            <div class="insta-border w-20 h-20 flex-shrink-0 mr-6 cursor-pointer">
-                                <img src="${profileData.image}" alt="Profile" class="w-full h-full rounded-full object-cover border-2 border-white">
-                            </div>
-                            
-                            <!-- スタッツ -->
-                            <div class="flex-1 flex justify-around text-center">
-                                ${profileData.stats.map(stat => `
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-gray-800 text-lg">${stat.value}</span>
-                                        <span class="text-xs text-gray-500">${stat.label}</span>
-                                    </div>
-                                `).join('')}
+                        <div class="group bg-slate-50 p-4 rounded-xl border border-slate-100 hover:shadow-lg transition-shadow">
+                            <h3 class="text-xl font-bold text-cyan-600 mb-2">Portfolio V1</h3>
+                            <p class="text-sm text-gray-600 mb-3">以前作成したシンプルなポートフォリオサイト。</p>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-md font-bold">HTML/CSS</span>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-md font-bold">JS</span>
                             </div>
                         </div>
-                        
-                        <!-- 自己紹介 -->
-                        <div class="mb-6">
-                            <h2 class="font-bold text-gray-800 text-sm mb-1">${profileData.name}</h2>
-                            <p class="text-xs text-gray-500 mb-2">${profileData.role}</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">${profileData.bio}</p>
-                        </div>
-
-                        <!-- アクションボタン -->
-                        <div class="flex gap-2 mb-6">
-                            <button onclick="alert('フォロー機能はデモです')" class="flex-1 insta-gradient-bg text-white py-1.5 rounded text-sm font-semibold shadow-sm active:opacity-90 transition">Follow</button>
-                            <button onclick="alert('メッセージ機能はデモです')" class="flex-1 bg-gray-100 text-gray-800 py-1.5 rounded text-sm font-semibold border border-gray-200 active:bg-gray-200 transition">Message</button>
+                         <div class="group bg-slate-50 p-4 rounded-xl border border-slate-100 hover:shadow-lg transition-shadow">
+                            <h3 class="text-xl font-bold text-cyan-600 mb-2">Task Manager</h3>
+                            <p class="text-sm text-gray-600 mb-3">生産性を向上させるためのタスク管理ツール。</p>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-md font-bold">Vue.js</span>
+                                <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-md font-bold">Firebase</span>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- スキル一覧セクション (ストーリーズ風ハイライト) -->
-                    <div class="border-t border-gray-100">
-                         <div class="flex items-center justify-center py-3 border-b border-gray-100">
-                             <i class="fa-solid fa-table-cells text-sm mr-2 text-gray-800"></i>
-                             <span class="text-xs font-bold text-gray-800 uppercase tracking-widest">Skills & Services</span>
-                         </div>
-                         <div class="flex flex-col bg-white">
-                            ${skillsHtml}
-                         </div>
-                    </div>
-                </div>
-            `;
-            
-            app.innerHTML = html;
-            window.scrollTo(0, 0);
-        }
-
-        // 詳細画面の描画
-        function renderDetail(skillId) {
-            const skill = skillsData.find(s => s.id === skillId);
-            if (!skill) return;
-
-            const tagsHtml = skill.details.tags.map(tag => 
-                `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-md mr-2 mb-2">#${tag}</span>`
-            ).join('');
-
-            const achievementsHtml = skill.details.achievements.map(item =>
-                `<li class="flex items-start mb-2 text-sm text-gray-700">
-                    <i class="fa-solid fa-check text-green-500 mt-1 mr-2 text-xs"></i>
-                    <span>${item}</span>
-                </li>`
-            ).join('');
-
-            const html = `
-                <div class="slide-up min-h-full bg-white pb-8">
-                    <!-- ヘッダー (Backボタン) -->
-                    <div class="sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-gray-100 px-4 py-3 flex items-center">
-                        <button onclick="renderHome()" class="mr-4 text-gray-800 hover:text-pink-600 transition">
-                            <i class="fa-solid fa-arrow-left text-lg"></i>
-                        </button>
-                        <h1 class="font-bold text-sm text-gray-800">Detail</h1>
-                    </div>
-
-                    <!-- メインビジュアル -->
-                    <div class="w-full h-48 bg-gray-50 flex items-center justify-center mb-6 relative overflow-hidden">
-                        <!-- 背景装飾 -->
-                        <div class="absolute inset-0 opacity-10 insta-gradient-bg"></div>
-                        <div class="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-sm z-10">
-                            <i class="fa-solid ${skill.icon} ${skill.color} text-4xl"></i>
-                        </div>
-                    </div>
-
-                    <!-- コンテンツ -->
-                    <div class="px-6">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-2">${skill.details.title}</h2>
-                            <div class="h-1 w-12 insta-gradient-bg rounded mb-4"></div>
-                            <p class="text-gray-600 leading-7 text-sm">
-                                ${skill.details.description}
-                            </p>
-                        </div>
-
-                        <!-- タグ -->
-                        <div class="flex flex-wrap mb-8">
-                            ${tagsHtml}
-                        </div>
-
-                        <!-- 実績・できることリスト -->
-                        <div class="bg-gray-50 rounded-xl p-5 border border-gray-100 mb-8">
-                            <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center">
-                                <i class="fa-solid fa-star text-yellow-400 mr-2"></i>
-                                Main Activities
-                            </h3>
-                            <ul class="list-none">
-                                ${achievementsHtml}
+                `
+            },
+            skills: {
+                title: "My Skills",
+                headerGradient: "linear-gradient(135deg, #f0abfc 0%, #d946ef 100%)",
+                html: `
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-pink-50 rounded-xl">
+                            <h4 class="font-bold text-pink-600 mb-2">Frontend</h4>
+                            <ul class="space-y-1 text-sm text-gray-600">
+                                <li>• HTML5 / CSS3</li>
+                                <li>• JavaScript (ES6+)</li>
+                                <li>• React / Next.js</li>
+                                <li>• Tailwind CSS</li>
                             </ul>
                         </div>
-
-                        <!-- CTAボタン -->
-                        <button onclick="alert('${skill.title}について問い合わせる')" class="w-full insta-gradient-bg text-white py-3 rounded-lg font-bold shadow-md active:scale-95 transition duration-200">
-                            このスキルについて相談する
-                        </button>
+                        <div class="p-4 bg-purple-50 rounded-xl">
+                            <h4 class="font-bold text-purple-600 mb-2">Backend</h4>
+                            <ul class="space-y-1 text-sm text-gray-600">
+                                <li>• Node.js</li>
+                                <li>• Python</li>
+                                <li>• PostgreSQL</li>
+                                <li>• Firebase</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-indigo-50 rounded-xl col-span-2">
+                            <h4 class="font-bold text-indigo-600 mb-2">Tools</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-white border border-indigo-100 rounded-full text-xs text-indigo-500 shadow-sm">Git</span>
+                                <span class="px-3 py-1 bg-white border border-indigo-100 rounded-full text-xs text-indigo-500 shadow-sm">Figma</span>
+                                <span class="px-3 py-1 bg-white border border-indigo-100 rounded-full text-xs text-indigo-500 shadow-sm">VS Code</span>
+                                <span class="px-3 py-1 bg-white border border-indigo-100 rounded-full text-xs text-indigo-500 shadow-sm">Docker</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `;
+                `
+            },
+            about: {
+                title: "About Me",
+                headerGradient: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                html: `
+                    <div class="flex flex-col items-center text-center space-y-4">
+                        <div class="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center text-4xl">
+                            👨‍💻
+                        </div>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            こんにちは！私はWeb開発者として活動しています。<br>
+                            美しいデザインと機能的なコードを組み合わせることが大好きです。<br>
+                            新しい技術を学ぶことに情熱を持っており、常にユーザー体験の向上を目指しています。
+                        </p>
+                        <div class="w-full bg-orange-50 p-4 rounded-xl text-left mt-4">
+                            <h4 class="font-bold text-orange-600 mb-2">Goals for 2025</h4>
+                            <p class="text-sm text-gray-600">フルスタックなスキルをさらに磨き、3Dウェブデザインにも挑戦したいと考えています。</p>
+                        </div>
+                    </div>
+                `
+            },
+            contact: {
+                title: "Contact",
+                headerGradient: "linear-gradient(135deg, #a3e635 0%, #84cc16 100%)",
+                html: `
+                    <form class="space-y-4" onsubmit="event.preventDefault(); alert('メッセージを送信しました！(デモ)'); closeModal();">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-400 focus:border-transparent outline-none transition-all" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-400 focus:border-transparent outline-none transition-all" placeholder="hello@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lime-400 focus:border-transparent outline-none transition-all" placeholder="Let's work together!"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-lime-400 to-lime-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                            Send Message
+                        </button>
+                    </form>
+                    <div class="mt-6 flex justify-center space-x-6 text-gray-400">
+                        <a href="#" class="hover:text-lime-600 transition-colors"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="hover:text-lime-600 transition-colors"><i data-lucide="github"></i></a>
+                        <a href="#" class="hover:text-lime-600 transition-colors"><i data-lucide="linkedin"></i></a>
+                    </div>
+                `
+            }
+        };
 
-            app.innerHTML = html;
-            window.scrollTo(0, 0);
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalHeader = document.getElementById('modal-header');
+        const modalBody = document.getElementById('modal-body');
+
+        function openModal(type) {
+            const data = contents[type];
+            if(!data) return;
+
+            // コンテンツセット
+            modalTitle.textContent = data.title;
+            modalHeader.style.background = data.headerGradient;
+            modalBody.innerHTML = data.html;
+
+            // Lucideアイコン再描画(動的に追加されたHTML内用)
+            lucide.createIcons();
+
+            // モーダル表示
+            modalOverlay.classList.remove('hidden');
+            // 少し遅延させてOpacityアニメーションを開始
+            setTimeout(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-90');
+                modalContent.classList.add('scale-100');
+            }, 10);
         }
 
-        // 初期化
-        renderHome();
+        function closeModal() {
+            // アニメーション逆再生
+            modalOverlay.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-90');
 
+            // アニメーション完了後に非表示
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300);
+        }
     </script>
 </body>
 </html>
